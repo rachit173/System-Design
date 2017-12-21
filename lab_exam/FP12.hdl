@@ -1,0 +1,12 @@
+CHIP FP12 {
+    IN x[12],y[12];
+    OUT ans[12],overflow;
+    PARTS:
+        BLA4Bit(a=x[7..10],b=y[7..10],cin=false,s=diff);
+        Shifter(a[7]=true,a[0..6]=y[0..6],k=diff,out=shifty);       
+        Add8(x[7]=true,x[0..6]=x[0..6],y=shifty,s[0..6]=m2,s[1..7]=m1,cout=cout);
+        CLA4Bit(a=x[7..10],b[0]=true,s=xe1,cout=overflow);
+        Mux4(a=x[7..10],b=xe1,sel=cout,out=ans[7..10]);
+        And(a=x[11],b=x[11],out=ans[11]);
+        Mux7(a=m2,b=m1,sel=cout,out=ans[0..6]);
+}

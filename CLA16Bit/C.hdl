@@ -1,0 +1,7 @@
+CHIP C {
+    IN p, g, c;
+    OUT out;
+    PARTS:
+        And(a=p, b=c, out=o1);
+        Or(a=o1, b=g, out=out);
+}

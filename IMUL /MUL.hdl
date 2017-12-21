@@ -1,0 +1,55 @@
+CHIP MUL{
+    IN a[4],b[4];
+    OUT out[4],overflow;
+    PARTS:
+        And4(a=a,b=b[0],out[0]=a0b0, out[0]=out[0], out[1]=a1b0, out[2]=a2b0, out[3]=a3b0);
+        And4(a=a,b=b[1],out[0]=a0b1, out[1]=a1b1, out[2]=a2b1, out[3]=a3b1);
+        And4(a=a,b=b[2],out[0]=a0b2, out[1]=a1b2, out[2]=a2b2, out[3]=a3b2);
+        And4(a=a,b=b[3],out[0]=a0b3, out[1]=a1b3, out[2]=a2b3, out[3]=a3b3);
+        
+        FullAdder(a=a0b1,b=a1b0,c=false,sum=out[1],carry=c01);
+        FullAdder(a=a1b1,b=a2b0,c=c01,sum=h01,carry=c02);
+        FullAdder(a=a2b1,b=a3b0,c=c02,sum=h02,carry=c03);
+        FullAdder(a=a3b1,b=a3b0,c=c03,sum=h03,carry=c04);
+        FullAdder(a=a3b1,b=a3b0,c=c04,sum=h04,carry=c05);
+        FullAdder(a=a3b1,b=a3b0,c=c05,sum=h05,carry=c06);
+        FullAdder(a=a3b1,b=a3b0,c=c06,sum=h06);
+
+        FullAdder(a=h01,b=a0b2,c=false,sum=out[2],carry=c11);
+        FullAdder(a=h02,b=a1b2,c=c11,sum=h11,carry=c12);
+        FullAdder(a=h03,b=a2b2,c=c12,sum=h12,carry=c13);
+        FullAdder(a=h04,b=a3b2,c=c13,sum=h13,carry=c14);
+        FullAdder(a=h05,b=a2b2,c=c14,sum=h14,carry=c15);
+        FullAdder(a=h06,b=a3b2,c=c15,sum=h15);
+
+        Xor(a=a0b3, b=true, out=x1);
+        Xor(a=a1b3, b=true, out=x2);
+        Xor(a=a2b3, b=true, out=x3);
+        Xor(a=a3b3, b=true, out=x4);
+
+        FullAdder(a=h11,b=x1,c=true,sum=out[3],sum=p3,carry=c21);
+        FullAdder(a=h12,b=x2,c=c21,sum=p4,carry=c22);
+        FullAdder(a=h13,b=x3,c=c22,sum=p5,carry=c23);
+        FullAdder(a=h14,b=x4,c=c23,sum=p6, carry=c24);
+        FullAdder(a=h15,b=x4,c=c24,sum=p7);
+
+        Xor(a=a[3],b=b[3], out=z1);
+        Not(in=z1, out=z2);
+
+        Or(a=p4, b=p4, out=k1);
+        Or(a=p5, b=p6, out=k2);
+        Or(a=k1, b=p7, out=k3);
+        Or(a=k3, b=k2, out=z3);
+
+        And(a=p4, b=p4, out=n1);
+        And(a=p5, b=p6, out=n2);
+        And(a=n1, b=p7, out=n3);
+        And(a=n2, b=n3, out=n4);
+
+        Not(in=n4, out=z4);
+        And(a=z1, b=z4, out=m1);
+        And(a=z2, b=z3, out=m2);
+        Or(a=m1, b=m2, out=overflow);
+
+
+}

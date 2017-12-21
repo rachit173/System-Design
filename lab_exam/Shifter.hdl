@@ -1,0 +1,8 @@
+CHIP Shifter {
+    IN a[8],k[4];
+    OUT out[8];
+    PARTS:
+        Mux4Way8(a=a,b[0..6]=a[1..7],c[0..5]=a[2..7],d[0..4]=a[3..7],sel=k[0..1],out=o1);
+        Or(a=k[2],b=k[3],out=z);
+        Mux8(a=o1,sel=z,out=out);
+}

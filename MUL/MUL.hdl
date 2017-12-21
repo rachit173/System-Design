@@ -1,0 +1,30 @@
+CHIP MUL{
+    IN a[4],b[4];
+    OUT out[4],overflow;
+    PARTS:
+        And4(a=a,b=b[0],out[0]=a0b0, out[0]=out[0], out[1]=a1b0, out[2]=a2b0, out[3]=a3b0);
+        And4(a=a,b=b[1],out[0]=a0b1, out[1]=a1b1, out[2]=a2b1, out[3]=a3b1);
+        And4(a=a,b=b[2],out[0]=a0b2, out[1]=a1b2, out[2]=a2b2, out[3]=a3b2);
+        And4(a=a,b=b[3],out[0]=a0b3, out[1]=a1b3, out[2]=a2b3, out[3]=a3b3);
+        
+        FullAdder(a=a0b1,b=a1b0,c=false,sum=out[1],carry=c01);
+        FullAdder(a=a1b1,b=a2b0,c=c01,sum=h01,carry=c02);
+        FullAdder(a=a2b1,b=a3b0,c=c02,sum=h02,carry=c03);
+        FullAdder(a=a3b1,b=false,c=c03,sum=h03,carry=o1);
+
+        FullAdder(a=h01,b=a0b2,c=false,sum=out[2],carry=c11);
+        FullAdder(a=h02,b=a1b2,c=c11,sum=h11,carry=c12);
+        FullAdder(a=h03,b=a2b2,c=c12,sum=h12,carry=c13);
+        FullAdder(a=o1,b=a3b2,c=c13,sum=h13,carry=o2);
+
+        FullAdder(a=h11,b=a0b3,c=false,sum=out[3],sum=p3,carry=c21);
+        FullAdder(a=h12,b=a1b3,c=c21,sum=p4,carry=c22);
+        FullAdder(a=h13,b=a2b3,c=c22,sum=p5,carry=c23);
+        FullAdder(a=o2,b=a3b3,c=c23,sum=p6,carry=p7);
+
+        //overflow
+        Or(a=p7,b=p4,out=z1);
+        Or(a=p5,b=p6,out=z2);
+        //Or(a=z1,b=p7,out=z3);
+        Or(a=z1,b=z2,out=overflow);
+}

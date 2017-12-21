@@ -1,0 +1,35 @@
+CHIP CSAUnsigned {
+	IN x[8], y[8];
+	OUT mul[8], overflow;
+	PARTS:
+		PP0(a=x, b=y[0], out=pp0);
+		PP1(a=x, b=y[1], out=pp1);
+		PP2(a=x, b=y[2], out=pp2);
+		PP3(a=x, b=y[3], out=pp3);
+		PP4(a=x, b=y[4], out=pp4);
+		PP5(a=x, b=y[5], out=pp5);
+		PP6(a=x, b=y[6], out=pp6);
+		PP7(a=x, b=y[7], out=pp7);
+
+		Reducer3to2(x=pp0, y=pp1, z=pp2, c=c11, s=s11);
+		Reducer3to2(x=pp3, y=pp4, z=pp5, c=c12, s=s12);
+
+		Reducer3to2(x=c11, y=s11, z=c12, c=c21, s=s21);
+		Reducer3to2(x=s12, y=pp6, z=pp7, c=c22, s=s22);
+		
+		Reducer3to2(x=c21, y=s21, z=c22, c=c31, s=s31);
+
+		Reducer3to2(x=c31, y=s31, z=s22, c=c41, s=s41);
+		CLA16bitHL(a=c41, b=s41, cin=false, sum[8]=out8,sum[9]=out9,sum[10]=out10,sum[11]=out11,sum[12]=out12,sum[13]=out13,sum[14]=out14,sum[15]=out15,sum[0..7]=mul);
+
+		//overflow remaining
+        Or(a=out8,b=out9,out=z1);
+        Or(a=out10,b=out11,out=z2);
+        Or(a=out12,b=out13,out=z3);
+        Or(a=out14,b=out15,out=z4);
+
+        Or(a=z1,b=z2,out=q1);
+        Or(a=z3,b=z4,out=q2);
+
+        Or(a=q1,b=q2,out=overflow);        
+}

@@ -1,0 +1,12 @@
+CHIP CLA16bit{
+    IN a[16], b[16], cin;
+    OUT sum[16], cout;
+
+    PARTS:
+    CLA4bit(a=a[0..3], b=b[0..3],c0=cin, sum=sum[0..3], carryout=c4);
+    CLA4bit(a=a[4..7], b=b[4..7],c0=c4, sum=sum[4..7], carryout=c8);
+    CLA4bit(a=a[8..11], b=b[8..11],c0=c8, sum=sum[8..11], carryout=c12);
+    CLA4bit(a=a[12..15], b=b[12..15],c0=c12, sum=sum[12..15], carryout=cout);
+
+
+}

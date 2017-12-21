@@ -1,0 +1,10 @@
+CHIP CLA32bitHL{
+    IN a[32], b[32], cin;
+    OUT sum[32], cout;
+
+    PARTS:
+    CLA16bitHL(a=a[0..15], b=b[0..15], cin=cin, sum=sum[0..15], cout=o1);
+    CLA16bitHL(a=a[16..31], b=b[16..31], cin=o1, sum=sum[16..31], cout=cout);
+
+
+}

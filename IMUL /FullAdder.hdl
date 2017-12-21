@@ -1,0 +1,12 @@
+//created team 10
+CHIP FullAdder {
+    IN a, b, c;  
+    OUT sum, carry;   
+
+    PARTS:
+    Xor(a=a,b=b,out=pi);
+    Xor(a=pi,b=c,out=sum);
+    And(a=c,b=pi,out=o1);
+    And(a=a,b=b,out=gi);
+    Or(a=o1,b=gi,out=carry);
+}

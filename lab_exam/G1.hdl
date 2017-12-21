@@ -1,0 +1,7 @@
+CHIP G1{
+    IN x,y;
+    OUT g;
+    PARTS:
+    Not(in=x,out=x1);
+    And(a=x1,b=y,out=g);
+}

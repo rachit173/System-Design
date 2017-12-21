@@ -1,0 +1,10 @@
+CHIP Add16 {
+    IN a[16], b[16], cin;
+    OUT s[16], cout;
+
+    PARTS:
+        CLA4Bit(a=a[0..3], b=b[0..3], cin=cin, s=s[0..3], cout=c4);
+        CLA4Bit(a=a[4..7], b=b[4..7], cin=c4, s=s[4..7], cout=c8);
+        CLA4Bit(a=a[8..11], b=b[8..11], cin=c8, s=s[8..11], cout=c12);
+        CLA4Bit(a=a[12..15], b=b[12..15], cin=c12, s=s[12..15], cout=cout);
+}

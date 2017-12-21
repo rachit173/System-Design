@@ -1,0 +1,165 @@
+CHIP CLA16bitHL{
+    IN a[16], b[16], cin;
+    OUT sum[16], cout;
+
+    PARTS:
+    //generate zero level p terms
+    P(a=a[0], b=b[0], out=p00);
+    P(a=a[1], b=b[1], out=p01);
+    P(a=a[2], b=b[2], out=p02);
+    P(a=a[3], b=b[3], out=p03);
+    P(a=a[4], b=b[4], out=p04);
+    P(a=a[5], b=b[5], out=p05);
+    P(a=a[6], b=b[6], out=p06);
+    P(a=a[7], b=b[7], out=p07);
+    P(a=a[8], b=b[8], out=p08);
+    P(a=a[9], b=b[9], out=p09);
+    P(a=a[10], b=b[10], out=p010);
+    P(a=a[11], b=b[11], out=p011);
+    P(a=a[12], b=b[12], out=p012);
+    P(a=a[13], b=b[13], out=p013);
+    P(a=a[14], b=b[14], out=p014);
+    P(a=a[15], b=b[15], out=p015);
+
+    //generate zero level g terms
+    G(a=a[0], b=b[0], out=g00);
+    G(a=a[1], b=b[1], out=g01);
+    G(a=a[2], b=b[2], out=g02);
+    G(a=a[3], b=b[3], out=g03);
+    G(a=a[4], b=b[4], out=g04);
+    G(a=a[5], b=b[5], out=g05);
+    G(a=a[6], b=b[6], out=g06);
+    G(a=a[7], b=b[7], out=g07);
+    G(a=a[8], b=b[8], out=g08);
+    G(a=a[9], b=b[9], out=g09);
+    G(a=a[10], b=b[10], out=g010);
+    G(a=a[11], b=b[11], out=g011);
+    G(a=a[12], b=b[12], out=g012);
+    G(a=a[13], b=b[13], out=g013);
+    G(a=a[14], b=b[14], out=g014);
+    G(a=a[15], b=b[15], out=g015);
+
+    //generate 1 level P terms
+    And4(a=p00,b=p01, c=p02, d=p03, out=p10);
+    And4(a=p04,b=p05, c=p06, d=p07, out=p11);
+    And4(a=p08,b=p09, c=p010, d=p011, out=p12);
+    And4(a=p012,b=p013, c=p014, d=p015, out=p13);
+
+    //generate 1 level G terms
+    And4(a=p03, b=p02, c=p01, d=g00, out=o01);
+    And3(a=p03, b=p02, c=g01, out=o02);
+    And(a=p03, b=g02, out=o03);
+    Or4(a=o01, b=o02, c=o03, d=g03, out=g10);
+    
+    And4(a=p07, b=p06, c=p05, d=g04, out=o11);
+    And3(a=p07, b=p06, c=g05, out=o12);
+    And(a=p07, b=g06, out=o13);
+    Or4(a=o11, b=o12, c=o13, d=g07, out=g11);
+
+    And4(a=p011, b=p010, c=p09, d=g08, out=o21);
+    And3(a=p011, b=p010, c=g09, out=o22);
+    And(a=p011, b=g010, out=o23);
+    Or4(a=o21, b=o22, c=o23, d=g011, out=g12);
+
+    And4(a=p015, b=p014, c=p013, d=g012, out=o31);
+    And3(a=p015, b=p014, c=g013, out=o32);
+    And(a=p015, b=g014, out=o33);
+    Or4(a=o31, b=o32, c=o33, d=g015, out=g13);
+
+    //generate c4
+    And(a=p10,b=cin,out=i11);
+    Or(a=i11,b=g10,out=c4);
+
+    //generate c8
+    And3(a=p11,b=p10,c=cin, out = i21);
+    And(a=p11,b=g10, out=i22);
+    Or3(a=i21, b=i22, c=g11, out=c8);
+    
+    //generate c12
+    And4(a=p12, b=p11, c=p10, d=cin, out=i31);
+    And3(a=p12,b=p11,c=g10, out = i32);
+    And(a=p12,b=g11, out=i33);
+    Or4(a=i31, b=i32, c=i33, d=g12, out=c12);
+
+    //generate c16
+    And5(a=p13, b=p12, c=p11, d=p10, e=cin, out=i41);
+    And4(a=p13, b=p12, c=p11, d=g10, out=i42);
+    And3(a=p13,b=p12,c=g11, out = i43);
+    And(a=p13,b=g12, out=i44);
+    Or5(a=i41, b=i42, c=i43, d=i44, e=g13, out=cout);
+
+    //generate c1,c2,c3
+    And(a=p00,b=cin,out=j11);
+    Or(a=j11,b=g00,out=c1);
+
+    And3(a=p01,b=p00,c=cin, out = j21);
+    And(a=p01,b=g00, out=j22);
+    Or3(a=j21, b=j22, c=g01, out=c2);
+
+    And4(a=p02, b=p01, c=p00, d=cin, out=j31);
+    And3(a=p02,b=p01,c=g00, out = j32);
+    And(a=p02,b=g01, out=j33);
+    Or4(a=j31, b=j32, c=j33, d=g02, out=c3);
+
+    //generate c5,c6,c7
+    And(a=p04,b=c4,out=k11);
+    Or(a=k11,b=g04,out=c5);
+
+    And3(a=p05,b=p04,c=c4, out = k21);
+    And(a=p05,b=g04, out=k22);
+    Or3(a=k21, b=k22, c=g05, out=c6);
+
+    And4(a=p06, b=p05, c=p04, d=c4, out=k31);
+    And3(a=p06,b=p05,c=g04, out = k32);
+    And(a=p06,b=g05, out=k33);
+    Or4(a=k31, b=k32, c=k33, d=g06, out=c7);
+
+    //generate c9,c10,c11
+    And(a=p08,b=c8,out=l11);
+    Or(a=l11,b=g08,out=c9);
+
+    And3(a=p09,b=p08,c=c8, out = l21);
+    And(a=p09,b=g08, out=l22);
+    Or3(a=l21, b=l22, c=g09, out=c10);
+
+    And4(a=p010, b=p09, c=p08, d=c8, out=l31);
+    And3(a=p010,b=p09,c=g08, out = l32);
+    And(a=p010,b=g09, out=l33);
+    Or4(a=l31, b=l32, c=l33, d=g010, out=c11);
+    
+    //generate c13,c14,c15
+    And(a=p012,b=c12,out=m11);
+    Or(a=m11,b=g012,out=c13);
+
+    And3(a=p013,b=p012,c=c12, out = m21);
+    And(a=p013,b=g012, out=m22);
+    Or3(a=m21, b=m22, c=g013, out=c14);
+
+    And4(a=p014, b=p013, c=p012, d=c12, out=m31);
+    And3(a=p014,b=p013,c=g012, out = m32);
+    And(a=p014,b=g013, out=m33);
+    Or4(a=m31, b=m32, c=m33, d=g014, out=c15);
+
+    //generate sum bits
+    S(a=p00, b=cin, out=sum[0]);
+    S(a=p01, b=c1, out=sum[1]);
+    S(a=p02, b=c2, out=sum[2]);
+    S(a=p03, b=c3, out=sum[3]);
+    S(a=p04, b=c4, out=sum[4]);
+    S(a=p05, b=c5, out=sum[5]);
+    S(a=p06, b=c6, out=sum[6]);
+    S(a=p07, b=c7, out=sum[7]);
+    S(a=p08, b=c8, out=sum[8]);
+    S(a=p09, b=c9, out=sum[9]);
+    S(a=p010, b=c10, out=sum[10]);
+    S(a=p011, b=c11, out=sum[11]);
+    S(a=p012, b=c12, out=sum[12]);
+    S(a=p013, b=c13, out=sum[13]);
+    S(a=p014, b=c14, out=sum[14]);
+    S(a=p015, b=c15, out=sum[15]);
+    
+
+    
+
+
+}

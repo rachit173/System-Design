@@ -1,0 +1,11 @@
+CHIP Adder16 {
+    IN cs,a[16],b[16];
+    OUT s[16],overflow;
+    PARTS:
+        Xor16(a=b,b[0]=cs, b[1]=cs, b[2]=cs, b[3]=cs, b[4]=cs, b[5]=cs, b[6]=cs, b[7]=cs, b[8]=cs, b[9]=cs, b[10]=cs, b[11]=cs, b[12]=cs, b[13]=cs, b[14]=cs, b[15]=cs,out[0..3]=b1,out[4..7]=b2,out[8..11]=b3,out[12..15]=b4);
+        CLA4Bit(a=a[0..3], b=b1, cin=cs, s=s[0..3], cout=c4);
+        CLA4Bit(a=a[4..7], b=b2, cin=c4, s=s[4..7], cout=c8);
+        CLA4Bit(a=a[8..11], b=b3, cin=c8, s=s[8..11], cout=c12);
+        CLA4Bit(a=a[12..15],b=b4,cin=c12,s=s[12..15],cout=cout,cout1=cout1);
+        Xor(a=cout,b=cout1,out=overflow);
+}

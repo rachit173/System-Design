@@ -1,0 +1,37 @@
+CHIP CLA4Bit {
+    IN a[4], b[4], cin;
+    OUT s[4], cout,cout1;
+    PARTS:
+        P(x=a[0], y=b[0], p=p0);
+        P(x=a[1], y=b[1], p=p1);
+        P(x=a[2], y=b[2], p=p2);
+        P(x=a[3], y=b[3], p=p3);
+        
+        G(x=a[0], y=b[0], g=g0);
+        G(x=a[1], y=b[1], g=g1);
+        G(x=a[2], y=b[2], g=g2);
+        G(x=a[3], y=b[3], g=g3);
+        
+        And(a=p0, b=cin, out=o1);
+        Or(a=o1, b=g0, out=c1);
+        
+        And3(a=p1, b=p0, c=cin, out=o21);
+        And(a=p1, b=g0, out=o22);
+        Or3(a=o21, b=o22, c=g1, out=c2);
+        
+        And4(a=p2, b=p1, c=p0, d=cin, out=o31);
+        And3(a=p2, b=p1, c=g0, out=o32);
+        And(a=p2, b=g1, out=o33);
+        Or4(a=o31, b=o32, c=o33, d=g2, out=c3,out=cout1);
+        
+        And5(a=p3, b=p2, c=p1, d=p0, e=cin, out=o41);
+        And4(a=p3, b=p2, c=p1, d=g0, out=o42);
+        And3(a=p3, b=p2, c=g1, out=o43);
+        And(a=p3, b=g2, out=o44);
+        Or5(a=o41, b=o42, c=o43, d=o44, e=g3, out=cout);
+
+        S(p=p0, c=cin, s=s[0]);
+        S(p=p1, c=c1, s=s[1]);
+        S(p=p2, c=c2, s=s[2]);
+        S(p=p3, c=c3, s=s[3]);
+}

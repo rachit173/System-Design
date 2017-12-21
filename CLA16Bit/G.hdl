@@ -1,0 +1,6 @@
+CHIP G{
+    IN x,y;
+    OUT g;
+    PARTS:
+    And(a=x,b=y,out=g);
+}

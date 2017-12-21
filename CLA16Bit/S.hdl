@@ -1,0 +1,6 @@
+CHIP S{
+    IN p, c;
+    OUT s;
+    PARTS:
+    Xor(a=p,b=c,out=s);
+}

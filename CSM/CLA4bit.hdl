@@ -1,0 +1,38 @@
+CHIP CLA4bit{
+    IN a[4],b[4],c0;
+    OUT sum[4],carryout;
+
+    PARTS:
+    P(a=a[0], b=b[0], out=p0);
+    P(a=a[1], b=b[1], out=p1);
+    P(a=a[2], b=b[2], out=p2);
+    P(a=a[3], b=b[3], out=p3);
+
+    G(a=a[0], b=b[0], out=g0);
+    G(a=a[1], b=b[1], out=g1);
+    G(a=a[2], b=b[2], out=g2);
+    G(a=a[3], b=b[3], out=g3);
+
+    And(a=p0,b=c0,out=o11);
+    Or(a=o11,b=g0,out=c1);
+
+    And3(a=p1,b=p0,c=c0, out = o21);
+    And(a=p1,b=g0, out=o22);
+    Or3(a=o21, b=o22, c=g1, out=c2);
+
+    And4(a=p2, b=p1, c=p0, d=c0, out=o31);
+    And3(a=p2,b=p1,c=g0, out = o32);
+    And(a=p2,b=g1, out=o33);
+    Or4(a=o31, b=o32, c=o33, d=g2, out=c3);
+
+    And5(a=p3, b=p2, c=p1, d=p0, e=c0, out=o41);
+    And4(a=p3, b=p2, c=p1, d=g0, out=o42);
+    And3(a=p3,b=p2,c=g1, out = o43);
+    And(a=p3,b=g2, out=o44);
+    Or5(a=o41, b=o42, c=o43, d=o44, e=g3, out=carryout);
+
+    S(a=p0, b=c0, out=sum[0]);
+    S(a=p1, b=c1, out=sum[1]);
+    S(a=p2, b=c2, out=sum[2]);
+    S(a=p3, b=c3, out=sum[3]);
+}

@@ -1,0 +1,7 @@
+CHIP Add8 {
+    IN x[8], y[8], cin;
+    OUT s[8],cout;
+    PARTS:
+        CLA4Bit(a=x[0..3],b=y[0..3],cin=cin,s=s[0..3],cout=c4);
+        CLA4Bit(a=x[4..7],b=y[4..7],cin=c4,s=s[4..7],cout=cout);
+}

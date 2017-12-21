@@ -1,0 +1,13 @@
+CHIP PP6{
+ IN a[8],b;
+ OUT out[16];
+ PARTS:
+   And(a=a[0],b=b,out=out[6]);
+   And(a=a[1],b=b,out=out[7]);
+   And(a=a[2],b=b,out=out[8]);
+   And(a=a[3],b=b,out=out[9]);
+   And(a=a[4],b=b,out=out[10]);
+   And(a=a[5],b=b,out=out[11]);
+   And(a=a[6],b=b,out=out[12]);
+   And(a=a[7],b=b,out=out[13]);
+}
